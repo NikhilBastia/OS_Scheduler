@@ -446,16 +446,6 @@ _parcelHelpers.export(exports, "displayProcesses", function () {
 _parcelHelpers.export(exports, "displayProcessesHandler", function () {
   return displayProcessesHandler;
 });
-const processInfoRows = document.querySelector(".process__info-initial-box");
-const btnForm = document.querySelector(".form__btn");
-const errorElement = document.getElementById("error");
-const exclamationMark = document.querySelector(".exclamation__img");
-const inputArrival = document.querySelector(".form__input--arrival");
-const inputPriority = document.querySelector(".form__input--priority");
-const inputBurst = document.querySelector(".form__input--burst");
-const inputQuantum = document.querySelector(".form__input--quantum");
-let i = 1, pid = 1, // For displayFinalProcess Function
-arrivalTimes = [], priorities = [], processId = [], burstTimes = [];
 const displayProcesses = function (arrival, priority, burst) {
   const html = `
           <div class="row process__row">
@@ -470,7 +460,6 @@ const displayProcesses = function (arrival, priority, burst) {
 };
 const displayProcessesHandler = function (publisher) {
   btnForm.addEventListener("click", function (event) {
-    event.preventDefault();
     let errorMsgs = [];
     errorElement.innerText = "";
     exclamationMark.classList.add("hidden");
@@ -493,6 +482,7 @@ const displayProcessesHandler = function (publisher) {
       publisher(arrivalTime, priority, burstTime);
       inputArrival.value = inputBurst.value = inputPriority.value = "";
     }
+    event.preventDefault();
   });
 };
 
@@ -540,4 +530,4 @@ exports.export = function (dest, destName, get) {
 };
 },{}]},["7BONy","3miIZ"], "3miIZ", "parcelRequire575a")
 
-//# sourceMappingURL=index.250b04c7.js.map
+//# sourceMappingURL=index.HASH_REF_6315ebf922a29661e8263da0250b04c7.js.map

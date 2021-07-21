@@ -428,14 +428,7 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"3miIZ":[function(require,module,exports) {
-var _viewsDisplayProcessViewDProcessView = require("./views/displayProcessView/dProcessView");
-const displayProcessController = function (arrivalTime, priority, burstTime) {
-  _viewsDisplayProcessViewDProcessView.displayProcesses(arrivalTime, priority, burstTime);
-};
-const init = function () {
-  _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
-};
-init();
+require("./views/displayProcessView/dProcessView");
 
 },{"./views/displayProcessView/dProcessView":"fWIKj"}],"fWIKj":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
@@ -443,19 +436,7 @@ _parcelHelpers.defineInteropFlag(exports);
 _parcelHelpers.export(exports, "displayProcesses", function () {
   return displayProcesses;
 });
-_parcelHelpers.export(exports, "displayProcessesHandler", function () {
-  return displayProcessesHandler;
-});
 const processInfoRows = document.querySelector(".process__info-initial-box");
-const btnForm = document.querySelector(".form__btn");
-const errorElement = document.getElementById("error");
-const exclamationMark = document.querySelector(".exclamation__img");
-const inputArrival = document.querySelector(".form__input--arrival");
-const inputPriority = document.querySelector(".form__input--priority");
-const inputBurst = document.querySelector(".form__input--burst");
-const inputQuantum = document.querySelector(".form__input--quantum");
-let i = 1, pid = 1, // For displayFinalProcess Function
-arrivalTimes = [], priorities = [], processId = [], burstTimes = [];
 const displayProcesses = function (arrival, priority, burst) {
   const html = `
           <div class="row process__row">
@@ -467,33 +448,6 @@ const displayProcesses = function (arrival, priority, burst) {
       `;
   processInfoRows.insertAdjacentHTML("beforeend", html);
   i += 1;
-};
-const displayProcessesHandler = function (publisher) {
-  btnForm.addEventListener("click", function (event) {
-    event.preventDefault();
-    let errorMsgs = [];
-    errorElement.innerText = "";
-    exclamationMark.classList.add("hidden");
-    const arrivalTime = Number(inputArrival.value);
-    const priority = Number(inputPriority.value);
-    const burstTime = Number(inputBurst.value);
-    const quantum = Number(inputQuantum.value);
-    const pushError = inputArrival.value === "" || inputBurst.value === "" || inputQuantum.value === "";
-    if (pushError) {
-      errorMsgs.push("Please fill all the inputs");
-      errorElement.innerText = errorMsgs[0];
-      exclamationMark.classList.remove("hidden");
-    } else {
-      console.log("in else part");
-      arrivalTimes.push(arrivalTime);
-      priorities.push(priority);
-      burstTimes.push(burstTime);
-      processId.push(pid);
-      pid += 1;
-      publisher(arrivalTime, priority, burstTime);
-      inputArrival.value = inputBurst.value = inputPriority.value = "";
-    }
-  });
 };
 
 },{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"5gA8y":[function(require,module,exports) {
@@ -540,4 +494,4 @@ exports.export = function (dest, destName, get) {
 };
 },{}]},["7BONy","3miIZ"], "3miIZ", "parcelRequire575a")
 
-//# sourceMappingURL=index.250b04c7.js.map
+//# sourceMappingURL=index.HASH_REF_6315ebf922a29661e8263da0250b04c7.js.map

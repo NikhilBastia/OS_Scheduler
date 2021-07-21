@@ -1,0 +1,9 @@
+require("lodash");
+var _viewsDisplayProcessViewDProcessView = require("./views/displayProcessView/dProcessView");
+const displayProcessController = function () {
+  _viewsDisplayProcessViewDProcessView.displayProcesses(arrivalTime, priority, burstTime);
+};
+const init = function () {
+  _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcess);
+};
+init();

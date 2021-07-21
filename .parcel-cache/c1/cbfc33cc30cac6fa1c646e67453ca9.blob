@@ -1,0 +1,17 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displayProcesses", function () {
+  return displayProcesses;
+});
+const displayProcesses = function (arrival, priority, burst) {
+  const html = `
+          <div class="row process__row">
+              <div class="col-md-3 process__desc">Process ${i}</div>
+              <div class="col-md-3 process__time">${arrival}</div>
+              <div class="col-md-3 process__time">${priority}</div>
+              <div class="col-md-3 process__time">${burst}</div>
+          </div>
+      `;
+  processInfoRows.insertAdjacentHTML("beforeend", html);
+  i += 1;
+};

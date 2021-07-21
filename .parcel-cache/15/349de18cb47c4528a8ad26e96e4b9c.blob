@@ -1,0 +1,6 @@
+require("lodash");
+var _viewsDisplayProcessViewDProcessView = require("./views/displayProcessView/dProcessView");
+const displayProcess = function () {
+  _viewsDisplayProcessViewDProcessView;
+};
+const init = function () {};
