@@ -1,0 +1,14 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "fcfsHandler", function () {
+  return fcfsHandler;
+});
+var _configGlobalVar = require("../config/globalVar");
+const fcfsScheduling = document.querySelector(".nav__menu-item__FCFS");
+const fcfsHandler = function () {
+  fcfsScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnfcfsClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnfcfsClick === 1 && _configGlobalVar.globalVar.btnAlgoClick === 0 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) FCFS(processId, arrivalTimes, burstTimes);
+  });
+};

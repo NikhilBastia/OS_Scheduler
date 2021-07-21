@@ -1,0 +1,14 @@
+var _viewsDisplayProcessViewDProcessView = require("./views/displayProcessView/dProcessView");
+var _viewsFcfsView = require("./views/fcfsView");
+// import { globalVar } from "./config/globalVar";
+const displayProcessController = function (arrivalTime, priority, burstTime) {
+  _viewsDisplayProcessViewDProcessView.displayProcesses(arrivalTime, priority, burstTime);
+};
+const fcfsSchedulingController = function () {
+  FCFS(processId, arrivalTimes, burstTimes);
+};
+const init = function () {
+  _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
+  _viewsFcfsView.fcfsHandler(fcfsSchedulingController);
+};
+init();

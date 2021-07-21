@@ -1,0 +1,9 @@
+var _viewsDisplayProcessViewDProcessView = require("./views/displayProcessView/dProcessView");
+const displayProcessController = function (arrivalTime, priority, burstTime) {
+  _viewsDisplayProcessViewDProcessView.displayProcesses(arrivalTime, priority, burstTime);
+};
+const fcfsSchedulingController = function () {};
+const init = function () {
+  _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
+};
+init();

@@ -1,0 +1,37 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displayFinalProcess", function () {
+  return displayFinalProcess;
+});
+_parcelHelpers.export(exports, "fcfsHandler", function () {
+  return fcfsHandler;
+});
+var _configGlobalVar = require("../config/globalVar");
+const fcfsScheduling = document.querySelector(".nav__menu-item__FCFS");
+const processFCFSRows = document.querySelector(".process__info-fcfs-box");
+const tabs = document.querySelectorAll("[data-tab-target]");
+const tabContents = document.querySelectorAll("[data-tab-content]");
+const displayFinalProcess = function (pid, arrival, burst, completion, waiting, turnaround) {
+  console.log("in displayFinalProcess");
+  const html = `
+    <div class="row process__row">
+                <div class="col-md-3 process__desc">Process ${pid}</div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-3 process__time">${arrival}</div>
+                        <div class="col-md-3 process__time">${burst}</div>
+                        <div class="col-md-3 process__time">${waiting}</div>
+                        <div class="col-md-3 process__time">${turnaround}</div>
+                    </div>
+                </div>
+            </div>
+    `;
+  processFCFSRows.insertAdjacentHTML("beforeend", html);
+};
+const fcfsHandler = function (publisher) {
+  fcfsScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnfcfsClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnfcfsClick === 1 && _configGlobalVar.globalVar.btnAlgoClick === 0 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.arrivalTimes, _configGlobalVar.globalVar.burstTimes);
+  });
+};

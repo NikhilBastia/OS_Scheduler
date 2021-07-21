@@ -1,0 +1,14 @@
+// const fcfsScheduling = document.querySelector(".nav__menu-item__FCFS");
+
+// let btnfcfsClick = 0,
+//   btnAlgoClick = 0,
+//   btnSummaryClick = 0;
+
+// export const fcfsHandler = function () {
+//   fcfsScheduling.addEventListener("click", function () {
+//     btnfcfsClick++;
+//     let shouldCallAlgo =
+//       btnfcfsClick === 1 && btnAlgoClick === 0 && btnSummaryClick === 0;
+//     if (shouldCallAlgo) FCFS(processId, arrivalTimes, burstTimes);
+//   });
+// };

@@ -429,15 +429,21 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"3miIZ":[function(require,module,exports) {
 var _viewsDisplayProcessViewDProcessView = require("./views/displayProcessView/dProcessView");
+var _viewsFcfsView = require("./views/fcfsView");
+var _modelsFcfsAlgo = require("./models/fcfsAlgo");
 const displayProcessController = function (arrivalTime, priority, burstTime) {
   _viewsDisplayProcessViewDProcessView.displayProcesses(arrivalTime, priority, burstTime);
 };
+const fcfsSchedulingController = function (processId, arrivalTimes, burstTimes) {
+  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes, _viewsFcfsView.displayFinalProcess);
+};
 const init = function () {
   _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
+  _viewsFcfsView.fcfsHandler(fcfsSchedulingController);
 };
 init();
 
-},{"./views/displayProcessView/dProcessView":"fWIKj"}],"fWIKj":[function(require,module,exports) {
+},{"./views/displayProcessView/dProcessView":"fWIKj","./views/fcfsView":"7AX4n","./models/fcfsAlgo":"6q9nR"}],"fWIKj":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 _parcelHelpers.export(exports, "displayProcesses", function () {
@@ -446,6 +452,7 @@ _parcelHelpers.export(exports, "displayProcesses", function () {
 _parcelHelpers.export(exports, "displayProcessesHandler", function () {
   return displayProcessesHandler;
 });
+var _configGlobalVar = require("../../config/globalVar");
 const processInfoRows = document.querySelector(".process__info-initial-box");
 const btnForm = document.querySelector(".form__btn");
 const errorElement = document.getElementById("error");
@@ -454,23 +461,20 @@ const inputArrival = document.querySelector(".form__input--arrival");
 const inputPriority = document.querySelector(".form__input--priority");
 const inputBurst = document.querySelector(".form__input--burst");
 const inputQuantum = document.querySelector(".form__input--quantum");
-let i = 1, pid = 1, // For displayFinalProcess Function
-arrivalTimes = [], priorities = [], processId = [], burstTimes = [];
 const displayProcesses = function (arrival, priority, burst) {
   const html = `
           <div class="row process__row">
-              <div class="col-md-3 process__desc">Process ${i}</div>
+              <div class="col-md-3 process__desc">Process ${_configGlobalVar.globalVar.i}</div>
               <div class="col-md-3 process__time">${arrival}</div>
               <div class="col-md-3 process__time">${priority}</div>
               <div class="col-md-3 process__time">${burst}</div>
           </div>
       `;
   processInfoRows.insertAdjacentHTML("beforeend", html);
-  i += 1;
+  _configGlobalVar.globalVar.i += 1;
 };
 const displayProcessesHandler = function (publisher) {
   btnForm.addEventListener("click", function (event) {
-    event.preventDefault();
     let errorMsgs = [];
     errorElement.innerText = "";
     exclamationMark.classList.add("hidden");
@@ -485,18 +489,19 @@ const displayProcessesHandler = function (publisher) {
       exclamationMark.classList.remove("hidden");
     } else {
       console.log("in else part");
-      arrivalTimes.push(arrivalTime);
-      priorities.push(priority);
-      burstTimes.push(burstTime);
-      processId.push(pid);
-      pid += 1;
+      _configGlobalVar.globalVar.arrivalTimes.push(arrivalTime);
+      _configGlobalVar.globalVar.priorities.push(priority);
+      _configGlobalVar.globalVar.burstTimes.push(burstTime);
+      _configGlobalVar.globalVar.processId.push(_configGlobalVar.globalVar.pid);
+      _configGlobalVar.globalVar.pid += 1;
       publisher(arrivalTime, priority, burstTime);
       inputArrival.value = inputBurst.value = inputPriority.value = "";
     }
+    event.preventDefault();
   });
 };
 
-},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"5gA8y":[function(require,module,exports) {
+},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","../../config/globalVar":"468k9"}],"5gA8y":[function(require,module,exports) {
 "use strict";
 
 exports.interopDefault = function (a) {
@@ -538,6 +543,169 @@ exports.export = function (dest, destName, get) {
     get: get
   });
 };
-},{}]},["7BONy","3miIZ"], "3miIZ", "parcelRequire575a")
+},{}],"468k9":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "globalVar", function () {
+  return globalVar;
+});
+let globalVar = {
+  i: 1,
+  pid: 1,
+  // For displayFinalProcess Function
+  quantum: 0,
+  processes: [],
+  processId: [],
+  priorities: [],
+  burstTimes: [],
+  arrivalTimes: [],
+  avgTurnaroundTimes: [],
+  fcfsUITrigger: 0,
+  sjfPrUITrigger: 0,
+  sjfNPrUITrigger: 0,
+  roundRobinUITrigger: 0,
+  priorityPrUITrigger: 0,
+  priorityNPrUITrigger: 0,
+  sorted: false,
+  // for sorting purpose in btnSort eventListener
+  btnRRClick: 0,
+  btnAlgoClick: 0,
+  btnSummaryClick: 0,
+  btnfcfsClick: 0,
+  btnSjfPremClick: 0,
+  btnSjfNonPrClick: 0,
+  btnpriorityPrempClick: 0,
+  btnpriorityNonPrempClick: 0,
+  fcfsTtPushed: 0,
+  sjfPrTtPushed: 0,
+  sjfNPrTtPushed: 0,
+  rrTtPushed: 0,
+  priorityPrTtPushed: 0,
+  priorityNPrTtPushed: 0
+};
+
+},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"7AX4n":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displayFinalProcess", function () {
+  return displayFinalProcess;
+});
+_parcelHelpers.export(exports, "fcfsHandler", function () {
+  return fcfsHandler;
+});
+var _configGlobalVar = require("../config/globalVar");
+var _tabUtils = require("./tabUtils");
+const fcfsScheduling = document.querySelector(".nav__menu-item__FCFS");
+const processFCFSRows = document.querySelector(".process__info-fcfs-box");
+_tabUtils.tabfunctionality();
+const displayFinalProcess = function (pid, arrival, burst, completion, waiting, turnaround) {
+  console.log("in displayFinalProcess");
+  const html = `
+    <div class="row process__row">
+                <div class="col-md-3 process__desc">Process ${pid}</div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-3 process__time">${arrival}</div>
+                        <div class="col-md-3 process__time">${burst}</div>
+                        <div class="col-md-3 process__time">${waiting}</div>
+                        <div class="col-md-3 process__time">${turnaround}</div>
+                    </div>
+                </div>
+            </div>
+    `;
+  processFCFSRows.insertAdjacentHTML("beforeend", html);
+};
+const fcfsHandler = function (publisher) {
+  fcfsScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnfcfsClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnfcfsClick === 1 && _configGlobalVar.globalVar.btnAlgoClick === 0 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.arrivalTimes, _configGlobalVar.globalVar.burstTimes);
+  });
+};
+
+},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","../config/globalVar":"468k9","./tabUtils":"2RHhe"}],"2RHhe":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "tabfunctionality", function () {
+  return tabfunctionality;
+});
+const tabs = document.querySelectorAll("[data-tab-target]");
+const tabContents = document.querySelectorAll("[data-tab-content]");
+const tabfunctionality = function () {
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const target = document.querySelector(tab.dataset.tabTarget);
+      tabContents.forEach(tabContent => {
+        tabContent.classList.remove("active-state");
+      });
+      tabs.forEach(tab => {
+        tab.classList.remove("active-state");
+      });
+      tab.classList.add("active-state");
+      target.classList.add("active-state");
+    });
+  });
+};
+
+},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"6q9nR":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "FCFS", function () {
+  return FCFS;
+});
+var _configGlobalVar = require("../config/globalVar");
+const FCFS = function (processID, arrivalTime, burstTime, publisherView) {
+  let objCollection = [], AT = [], BT = [], Pid = [], completion, turnaround, waiting, att = [], awt = [], avgTt, avgWt, updateUI;
+  // Making an object to be sorted later.
+  for (var x = 0; x < arrivalTime.length; x++) objCollection.push({
+    PID: processID[x],
+    A: arrivalTime[x],
+    B: burstTime[x]
+  });
+  let objString = JSON.stringify(objCollection);
+  console.log(`ObjColl before sort: ${objString}`);
+  // Sorting begins with its corresponding Arrival Time and Burst Time
+  // No interchanging of partner happens
+  objCollection.sort(function (a, b) {
+    return a.A - b.A;
+  });
+  objString = JSON.stringify(objCollection);
+  console.log(`ObjColl after sort: ${objString}`);
+  for (var x = 0; x < objCollection.length; x++) {
+    // pushing to array AT and BT for later purposes.
+    AT.push(objCollection[x].A);
+    BT.push(objCollection[x].B);
+    Pid.push(objCollection[x].PID);
+    if (x === 0) {
+      waiting = 0;
+    } else {
+      if (AT[x - 1] + BT[x - 1] + awt[x - 1] < AT[x]) waiting = 0; else waiting = AT[x - 1] + BT[x - 1] + awt[x - 1] - AT[x];
+    }
+    turnaround = BT[x] + waiting;
+    // Display FCFS results in the UI
+    _configGlobalVar.globalVar.fcfsUITrigger++;
+    updateUI = _configGlobalVar.globalVar.fcfsUITrigger <= objCollection.length;
+    if (updateUI) {
+      console.log("before publisherView");
+      publisherView(Pid[x], AT[x], BT[x], completion, waiting, turnaround);
+    }
+    // pushing to array att and awt for later purposes.
+    att.push(turnaround);
+    awt.push(waiting);
+  }
+  let totalTurnaround = 0;
+  att.forEach(function (time) {
+    totalTurnaround += time;
+  });
+  avgTt = totalTurnaround / objCollection.length;
+  // avgWt = averageWT(awt, objCollection.length);
+  _configGlobalVar.globalVar.fcfsTtPushed++;
+  if (_configGlobalVar.globalVar.fcfsTtPushed === 1) _configGlobalVar.globalVar.avgTurnaroundTimes.push({
+    Process: "FCFS",
+    Avgtt: avgTt
+  });
+};
+
+},{"../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}]},["7BONy","3miIZ"], "3miIZ", "parcelRequire575a")
 
 //# sourceMappingURL=index.250b04c7.js.map
