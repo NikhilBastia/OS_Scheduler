@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="c939233fac58b9477553ebcead9850f3" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="17febf24d175b5420b1d41eff671b44a" rel="stylesheet">
+    <link rel="stylesheet" href="5a0d336c961e5812ef9e186d6c042586">
+    <script src="42579e0e377228ecee44f96ab66e123f"></script>
+    <script defer="" src="5af5013967da8fc74e52920be53227dc"></script>
+    <title>Scheduler</title>
+</head>
+
+<body>
+    <nav>
+        <ul class="nav__menu">
+            <a href="#process__info-final" data-tab-target="#process__fcfs-scheduler" class="nav__menu-item nav__menu-item__FCFS">FCFS</a>
+            <a href="#process__info-final" data-tab-target="#process__sjfpr-scheduler" class="nav__menu-item nav__menu-item__Sjf-pr">SJF
+                (Preemptive)</a>
+            <a href="#process__info-final" data-tab-target="#process__sjfnpr-scheduler" class="nav__menu-item nav__menu-item__sjf-npr">SJF
+                (Non-Preemptive)</a>
+            <a href="#process__info-final" data-tab-target="#process__rr-scheduler" class="nav__menu-item nav__menu-item__RR">Round Robin</a>
+            <a href="#process__info-final" data-tab-target="#process__priority-pr-scheduler" class="nav__menu-item nav__menu-item__prio-pr">Priority (Preemptive)</a>
+            <a href="#process__info-final" data-tab-target="#process__priority-npr-scheduler" class="nav__menu-item nav__menu-item__prio-npr">Priority (Non-Preemptive)</a>
+        </ul>
+    </nav>
+
+    <section id="scheduling__form">
+        <div class="container box--color">
+            <div class="priority__container">
+                <h2 class="scheduling__input-header">Scheduling Algorithms Inputs</h2>
+                <form class="priority__form">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="number" class="form__input form__input--arrival" size="30" required="">
+                                    <p class="form__label">Arrival Time</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" class="form__input form__input--priority" size="30" required="">
+                                    <p class="form__label">Priority</p>
+                                    <p class="form__label">(Priority Scheduling)</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" class="form__input form__input--burst" size="30" required="">
+                                    <p class="form__label">Burst Time</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" class="form__input form__input--quantum" size="30" required="">
+                                    <p class="form__label">Time Quantum</p>
+                                    <p class="form__label">(Round Robin Sched.)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="form__btn">&rarr;</button>
+                        </div>
+                    </div>
+                    <div class="error--msg">
+                        <img class="exclamation__img hidden" src="8385ba836299e0c4df73ceb58d846b47">
+                        <div id="error">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </section>
+    <div class="instruction__container">
+        <a class="instruction" href="">Instructions ></a>
+    </div>
+
+    <div class="modal-view hidden">
+        <button class="close-modal">&times;</button>
+        <h1>Instructions</h1>
+        <ol>
+            <li>Welcome to Process Scheduler.</li>
+            <li>Fill each of the input fields</li>
+            <img class="img-inputs" src="c619652ee2cf65d662fb32e334af1e31">
+            <li>After submitting the form by filling all the input fields, the inputs would be shown to the below table.
+            </li>
+            <img class="img-table" src="26ad1b56978796aaa19449d4af9453b8">
+            <li>Choose different Algorithms by clicking at different options shown in the navbar.</li>
+            <div class="modal-arrow">&darr;</div>
+            <img class="img-nav" src="b637bda0ab013d19a0ebf44475322a24">
+            <li>The resultant values would be shown as follows:
+            </li>
+            <img class="img-sched" src="1d3d9053bd0f48b84a1f19ac9b63d1dd">
+            <p>
+                *if you choose SJF(Preemptive) Sched.
+            </p>
+            <li>If want summary then click on the Summary button just below the input table.</li>
+            <img class="img-sched" src="4ecc320974e8f25c9e30167a56aff400">
+            <p class="instructions-extra">it would look somewhat like the above illustration.</p>
+            <li>If want summary results in sorted order w.r.t. the Avg Turnaround time then click the sort button after
+                clicking the summary button:</li>
+            <img class="img-sched" src="450f79f50c9c37300c966576db8a7f90">
+            <p class="instructions-extra" style="24eef89c66c832731c4034f3cbc21506">Bonus: A visual representaion of Avg turnaround time
+                using bar-graph</p>
+            <img class="img-sched" src="575f83558f7104518045188112291ff9" style="30d75bd75f4c922f1c04521685ee067c">
+            <div class="div__instruction">
+                <a class="got__instr">Got it</a>
+            </div>
+        </ol>
+    </div>
+
+
+    <section id="process__info">
+        <div class="container process__info-box process__info-initial-box">
+            <div class="row process__row">
+                <div class="col-md-3 process__desc">Process</div>
+                <div class="col-md-3 process__time">Arrival Time</div>
+                <div class="col-md-3 process__time">Priority</div>
+                <div class="col-md-3 process__time">Burst Time</div>
+            </div>
+        </div>
+    </section>
+    <div class="summary__container">
+        <a href="#process__info-final" class="summary__btn" data-tab-target="#process__avg-tt-summary">Summary</a>
+        <p class="scroll">Results</p>
+        <button class="button__tag">
+            <a class="process__btn" href="#process__info-final" data-tab-target="#process__fcfs-scheduler">&darr;</a>
+        </button>
+        <a href="#scheduling__form" class="up__arrow">&uarr;</a>
+    </div>
+
+    <section id="process__info-final">
+        <div id="process__fcfs-scheduler" data-tab-content="">
+            <div class="container box--color scheduling__box--flex fcfs__box--color">
+                <h1 class="scheduling__header">FCFS Scheduling</h1>
+            </div>
+            <div class="container process__info-box process__info-fcfs-box">
+                <div class="row process__row">
+                    <div class="col-md-3 process__desc">Process</div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-3 process__time">Arrival Time</div>
+                            <div class="col-md-3 process__time">Burst Time</div>
+                            <div class="col-md-3 process__time">Waiting Time</div>
+                            <div class="col-md-3 process__time">Turnaround Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="process__sjfpr-scheduler" data-tab-content="">
+            <div class="container box--color scheduling__box--flex sjf_pr__box--color">
+                <h1 class="scheduling__header">SFJ (Preemptive) Scheduling</h1>
+            </div>
+            <div class="container process__info-box process__info-sjfpr-box">
+                <div class="row process__row">
+                    <div class="col-md-3 process__desc">Process</div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-3 process__time">Arrival Time</div>
+                            <div class="col-md-3 process__time">Burst Time</div>
+                            <div class="col-md-3 process__time">Waiting Time</div>
+                            <div class="col-md-3 process__time">Turnaround Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="process__sjfnpr-scheduler" data-tab-content="">
+            <div class="container box--color scheduling__box--flex sjf_npr__box--color">
+                <h1 class="scheduling__header">SFJ (Non-Preemptive) Scheduling</h1>
+            </div>
+            <div class="container process__info-box process__info-sjfnpr-box">
+                <div class="row process__row">
+                    <div class="col-md-3 process__desc">Process</div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-3 process__time">Arrival Time</div>
+                            <div class="col-md-3 process__time">Burst Time</div>
+                            <div class="col-md-3 process__time">Waiting Time</div>
+                            <div class="col-md-3 process__time">Turnaround Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="process__rr-scheduler" data-tab-content="">
+            <div class="container box--color scheduling__box--flex rr__box--color">
+                <h1 class="scheduling__header">Round Robin Scheduling</h1>
+            </div>
+            <div class="container process__info-box process__info-rr-box">
+                <div class="row process__row">
+                    <div class="col-md-3 process__desc">Process</div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-3 process__time">Arrival Time</div>
+                            <div class="col-md-3 process__time">Burst Time</div>
+                            <div class="col-md-3 process__time">Waiting Time</div>
+                            <div class="col-md-3 process__time">Turnaround Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="process__priority-pr-scheduler" data-tab-content="">
+            <div class="container box--color scheduling__box--flex priority_pr__box--color">
+                <h1 class="scheduling__header">Priority (Preemptive) Scheduling</h1>
+            </div>
+            <div id="process__info-priority-box" class="container process__info-box">
+                <div class="row process__row">
+                    <div class="col-md-2 process__desc">Process</div>
+                    <div class="col-md-2 process__time">Arrival Time</div>
+                    <div class="col-md-2 process__time">Burst Time</div>
+                    <div class="col-md-2 process__time">Priority</div>
+                    <div class="col-md-2 process__time">Waiting Time</div>
+                    <div class="col-md-2 process__time">Turnaround Time</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="process__priority-npr-scheduler" data-tab-content="">
+            <div class="container box--color scheduling__box--flex priority_npr__box--color">
+                <h1 class="scheduling__header">Priority (Non-Preemptive) Scheduling</h1>
+            </div>
+            <div id="process__info-non-priority-box" class="container process__info-box">
+                <div class="row process__row">
+                    <div class="col-md-2 process__desc">Process</div>
+                    <div class="col-md-2 process__time">Arrival Time</div>
+                    <div class="col-md-2 process__time">Burst Time</div>
+                    <div class="col-md-2 process__time">Priority</div>
+                    <div class="col-md-2 process__time">Waiting Time</div>
+                    <div class="col-md-2 process__time">Turnaround Time</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="process__avg-tt-summary" data-tab-content="">
+            <div class="container box--color scheduling__box--flex priority_avg-tt__box--color">
+                <h1 class="scheduling__header">Average Turnaround Time</h1>
+            </div>
+            <div id="process__info-avg-tt" class="container process__info-box">
+                <div class="row process__row">
+                    <div class="col-md-6 process__desc">Process</div>
+                    <div class="col-md-6 process__time">Avg Turnaround Time</div>
+                </div>
+                <div class="process__info-avg-tt-box">
+                    <div class="row process__row process__row--effective">
+                        <div class="col-md-6 process__desc process__desc--color"></div>
+                        <div class="col-md-6 process__time"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sorted__avg-tt container">
+                <div class="avg-tt__legend"></div>
+                <p class="avg-tt__legend__desc">Shows the best Scheduling Algorithm(s) to use (in sorted table)</p>
+            </div>
+            <div class="sorting__section">
+                <button class="sort__btn">&uparrow; SORT</button>
+                <p>(will sort algos with least avg turnaround)</p>
+            </div>
+            <div id="charts">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
