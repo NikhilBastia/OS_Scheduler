@@ -1,4 +1,5 @@
 import { globalVar } from "../../config/globalVar";
+import * as chartView from "./chartView";
 
 const processAvgTTRows = document.querySelector(".process__info-avg-tt-box");
 const btnSummary = document.querySelector(".summary__btn");
@@ -71,7 +72,7 @@ export const summaryHandler = function (publisher) {
       );
     }
     displayAvgTt();
-    // displayChart();
+    chartView.displayChart();
   });
 
   btnSort.addEventListener("click", function (event) {
