@@ -436,7 +436,6 @@ var _viewsSjfViewSjfNPreView = require("../views/sjfView/sjfNPreView");
 var _viewsRoundRobinViewRrView = require("../views/roundRobinView/rrView");
 var _viewsPriorityViewPrePriorityView = require("../views/priorityView/prePriorityView");
 var _viewsPriorityViewNonPrePriorityView = require("../views/priorityView/nonPrePriorityView");
-var _viewsSummaryViewSummaryView = require("../views/summaryView/summaryView");
 var _modelsFcfsAlgo = require("../models/fcfsAlgo");
 var _modelsSjfPreAlgo = require("../models/sjfPreAlgo");
 var _modelsSjfNPreAlgo = require("../models/sjfNPreAlgo");
@@ -465,12 +464,12 @@ const nonPrePriorityController = function (processId, burstTimes, priorities, ar
   _modelsNonPrePriorityAlgo.priorityNonPreemptive(processId, burstTimes, priorities, arrivalTimes, _viewsPriorityViewNonPrePriorityView.displayNonPriorityPremptive);
 };
 const summaryController = function (processId, arrivalTimes, burstTimes, priorities, quantum) {
-  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes, _viewsFcfsViewFcfsView.displayFinalProcess);
-  _modelsPrePriorityAlgo.priorityPremptive(processId, burstTimes, priorities, arrivalTimes, _viewsPriorityViewPrePriorityView.displayPriorityPremptive);
-  _modelsNonPrePriorityAlgo.priorityNonPreemptive(processId, burstTimes, priorities, arrivalTimes, _viewsPriorityViewNonPrePriorityView.displayNonPriorityPremptive);
-  _modelsSjfPreAlgo.SjfPreemptive(processId, burstTimes, arrivalTimes, _viewsSjfViewSjfPreView.displaySjfPrProcess);
-  _modelsSjfNPreAlgo.SjfNonPreemptive(processId, burstTimes, arrivalTimes, _viewsSjfViewSjfNPreView.displaySjfNprprocess);
-  _modelsRrAlgo.roundRobin(processId, burstTimes, quantum, arrivalTimes, _viewsRoundRobinViewRrView.displayRRProcess);
+  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes);
+  _modelsPrePriorityAlgo.priorityPremptive(processId, burstTimes, priorities, arrivalTimes);
+  _modelsNonPrePriorityAlgo.priorityNonPreemptive(processId, burstTimes, priorities, arrivalTimes);
+  _modelsSjfPreAlgo.SjfPreemptive(processId, burstTimes, arrivalTimes);
+  _modelsSjfNPreAlgo.SjfNonPreemptive(processId, burstTimes, arrivalTimes);
+  _modelsRrAlgo.roundRobin(processId, burstTimes, quantum, arrivalTimes);
 };
 const init = function () {
   _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
@@ -482,11 +481,10 @@ const init = function () {
   _viewsRoundRobinViewRrView.roundRobinHandler(roundRobinController);
   _viewsPriorityViewPrePriorityView.prePriorityHandler(prePriorityController);
   _viewsPriorityViewNonPrePriorityView.nonPrePriorityHandler(nonPrePriorityController);
-  _viewsSummaryViewSummaryView.summaryHandler(summaryController);
 };
 init();
 
-},{"../views/displayProcessView/dProcessView":"fWIKj","../models/fcfsAlgo":"6q9nR","../views/fcfsView/fcfsView":"7pm9g","../models/sjfPreAlgo":"4FliK","../views/sjfView/sjfPreView":"7mTOt","../views/sjfView/sjfNPreView":"557yL","../models/sjfNPreAlgo":"77CQL","../models/rrAlgo":"2mloc","../views/roundRobinView/rrView":"7BmXL","../views/priorityView/prePriorityView":"5MMle","../models/prePriorityAlgo":"3o5Kr","../views/priorityView/nonPrePriorityView":"78wRd","../models/nonPrePriorityAlgo":"23QfT","../views/utilsView/instModal":"6EXbU","../views/summaryView/summaryView":"2kJdV"}],"fWIKj":[function(require,module,exports) {
+},{"../views/displayProcessView/dProcessView":"fWIKj","../models/fcfsAlgo":"6q9nR","../views/fcfsView/fcfsView":"7pm9g","../models/sjfPreAlgo":"4FliK","../views/sjfView/sjfPreView":"7mTOt","../views/sjfView/sjfNPreView":"557yL","../models/sjfNPreAlgo":"77CQL","../models/rrAlgo":"2mloc","../views/roundRobinView/rrView":"7BmXL","../views/priorityView/prePriorityView":"5MMle","../models/prePriorityAlgo":"3o5Kr","../views/priorityView/nonPrePriorityView":"78wRd","../models/nonPrePriorityAlgo":"23QfT","../views/utilsView/instModal":"6EXbU"}],"fWIKj":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 _parcelHelpers.export(exports, "displayProcesses", function () {
@@ -1372,71 +1370,6 @@ const modalHandler = function () {
   });
 };
 
-},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"2kJdV":[function(require,module,exports) {
-var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
-_parcelHelpers.defineInteropFlag(exports);
-_parcelHelpers.export(exports, "displayAvgTt", function () {
-  return displayAvgTt;
-});
-_parcelHelpers.export(exports, "summaryHandler", function () {
-  return summaryHandler;
-});
-var _configGlobalVar = require("../../config/globalVar");
-const processAvgTTRows = document.querySelector(".process__info-avg-tt-box");
-const btnSummary = document.querySelector(".summary__btn");
-const btnSort = document.querySelector(".sort__btn");
-const displayAvgTt = function (sort = false) {
-  processAvgTTRows.innerHTML = "";
-  if (sort) {
-    const sortedavgTtimes = _configGlobalVar.globalVar.avgTurnaroundTimes.slice().sort((a, b) => a.Avgtt - b.Avgtt);
-    var minAvgtt = sortedavgTtimes[0].Avgtt;
-    sortedavgTtimes.forEach(function (sortedavgTtime) {
-      if (minAvgtt === sortedavgTtime.Avgtt) {
-        var html = `
-            <div class="row process__row process__row--effective">
-              <div class="col-md-6 process__desc process__desc--color">${sortedavgTtime.Process} Scheduling</div>
-              <div class="col-md-6 process__time">${+sortedavgTtime.Avgtt.toFixed(2)}s</div>
-            </div>
-            `;
-      } else {
-        var html = `
-            <div class="row process__row">
-              <div class="col-md-6 process__desc">${sortedavgTtime.Process} Scheduling</div>
-              <div class="col-md-6 process__time">${+sortedavgTtime.Avgtt.toFixed(2)}s</div>
-            </div>
-            `;
-      }
-      processAvgTTRows.insertAdjacentHTML("beforeend", html);
-    });
-  }
-  if (!sort) {
-    _configGlobalVar.globalVar.avgTurnaroundTimes.forEach(function (avgTurnaroundTime) {
-      var html = `
-        <div class="row process__row">
-        <div class="col-md-6 process__desc">${avgTurnaroundTime.Process} Scheduling</div>
-              <div class="col-md-6 process__time">${+avgTurnaroundTime.Avgtt.toFixed(2)}s</div>
-                </div>
-                `;
-      processAvgTTRows.insertAdjacentHTML("beforeend", html);
-    });
-  }
-};
-const summaryHandler = function (publisher) {
-  btnSummary.addEventListener("click", function () {
-    _configGlobalVar.globalVar.btnSummaryClick++;
-    let shouldCallAlgos = _configGlobalVar.globalVar.btnSummaryClick === 1;
-    if (shouldCallAlgos) {
-      publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.arrivalTimes, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.priorities, _configGlobalVar.globalVar.quantum);
-    }
-    displayAvgTt();
-  });
-  btnSort.addEventListener("click", function (event) {
-    event.preventDefault();
-    displayAvgTt(!_configGlobalVar.globalVar.sorted);
-    _configGlobalVar.globalVar.sorted = !_configGlobalVar.globalVar.sorted;
-  });
-};
+},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}]},["2aKhF","3K3IO"], "3K3IO", "parcelRequire575a")
 
-},{"../../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}]},["2aKhF","3K3IO"], "3K3IO", "parcelRequire575a")
-
-//# sourceMappingURL=index.48460618.js.map
+//# sourceMappingURL=index.HASH_REF_c69fbbebad126498fca5896448460618.js.map

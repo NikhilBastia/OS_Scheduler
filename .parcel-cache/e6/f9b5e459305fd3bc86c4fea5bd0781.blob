@@ -465,12 +465,12 @@ const nonPrePriorityController = function (processId, burstTimes, priorities, ar
   _modelsNonPrePriorityAlgo.priorityNonPreemptive(processId, burstTimes, priorities, arrivalTimes, _viewsPriorityViewNonPrePriorityView.displayNonPriorityPremptive);
 };
 const summaryController = function (processId, arrivalTimes, burstTimes, priorities, quantum) {
-  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes, _viewsFcfsViewFcfsView.displayFinalProcess);
-  _modelsPrePriorityAlgo.priorityPremptive(processId, burstTimes, priorities, arrivalTimes, _viewsPriorityViewPrePriorityView.displayPriorityPremptive);
-  _modelsNonPrePriorityAlgo.priorityNonPreemptive(processId, burstTimes, priorities, arrivalTimes, _viewsPriorityViewNonPrePriorityView.displayNonPriorityPremptive);
-  _modelsSjfPreAlgo.SjfPreemptive(processId, burstTimes, arrivalTimes, _viewsSjfViewSjfPreView.displaySjfPrProcess);
-  _modelsSjfNPreAlgo.SjfNonPreemptive(processId, burstTimes, arrivalTimes, _viewsSjfViewSjfNPreView.displaySjfNprprocess);
-  _modelsRrAlgo.roundRobin(processId, burstTimes, quantum, arrivalTimes, _viewsRoundRobinViewRrView.displayRRProcess);
+  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes);
+  _modelsPrePriorityAlgo.priorityPremptive(processId, burstTimes, priorities, arrivalTimes);
+  _modelsNonPrePriorityAlgo.priorityNonPreemptive(processId, burstTimes, priorities, arrivalTimes);
+  _modelsSjfPreAlgo.SjfPreemptive(processId, burstTimes, arrivalTimes);
+  _modelsSjfNPreAlgo.SjfNonPreemptive(processId, burstTimes, arrivalTimes);
+  _modelsRrAlgo.roundRobin(processId, burstTimes, quantum, arrivalTimes);
 };
 const init = function () {
   _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
@@ -1382,9 +1382,7 @@ _parcelHelpers.export(exports, "summaryHandler", function () {
   return summaryHandler;
 });
 var _configGlobalVar = require("../../config/globalVar");
-const processAvgTTRows = document.querySelector(".process__info-avg-tt-box");
 const btnSummary = document.querySelector(".summary__btn");
-const btnSort = document.querySelector(".sort__btn");
 const displayAvgTt = function (sort = false) {
   processAvgTTRows.innerHTML = "";
   if (sort) {
@@ -1410,7 +1408,7 @@ const displayAvgTt = function (sort = false) {
     });
   }
   if (!sort) {
-    _configGlobalVar.globalVar.avgTurnaroundTimes.forEach(function (avgTurnaroundTime) {
+    avgTurnaroundTimes.forEach(function (avgTurnaroundTime) {
       var html = `
         <div class="row process__row">
         <div class="col-md-6 process__desc">${avgTurnaroundTime.Process} Scheduling</div>
@@ -1426,17 +1424,13 @@ const summaryHandler = function (publisher) {
     _configGlobalVar.globalVar.btnSummaryClick++;
     let shouldCallAlgos = _configGlobalVar.globalVar.btnSummaryClick === 1;
     if (shouldCallAlgos) {
-      publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.arrivalTimes, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.priorities, _configGlobalVar.globalVar.quantum);
+      publisher(processId, arrivalTimes, burstTimes, priorities, quantum);
     }
     displayAvgTt();
-  });
-  btnSort.addEventListener("click", function (event) {
-    event.preventDefault();
-    displayAvgTt(!_configGlobalVar.globalVar.sorted);
-    _configGlobalVar.globalVar.sorted = !_configGlobalVar.globalVar.sorted;
+    displayChart();
   });
 };
 
 },{"../../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}]},["2aKhF","3K3IO"], "3K3IO", "parcelRequire575a")
 
-//# sourceMappingURL=index.48460618.js.map
+//# sourceMappingURL=index.HASH_REF_c69fbbebad126498fca5896448460618.js.map

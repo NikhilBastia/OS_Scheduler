@@ -1384,7 +1384,6 @@ _parcelHelpers.export(exports, "summaryHandler", function () {
 var _configGlobalVar = require("../../config/globalVar");
 const processAvgTTRows = document.querySelector(".process__info-avg-tt-box");
 const btnSummary = document.querySelector(".summary__btn");
-const btnSort = document.querySelector(".sort__btn");
 const displayAvgTt = function (sort = false) {
   processAvgTTRows.innerHTML = "";
   if (sort) {
@@ -1439,4 +1438,4 @@ const summaryHandler = function (publisher) {
 
 },{"../../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}]},["2aKhF","3K3IO"], "3K3IO", "parcelRequire575a")
 
-//# sourceMappingURL=index.48460618.js.map
+//# sourceMappingURL=index.HASH_REF_c69fbbebad126498fca5896448460618.js.map

@@ -1,0 +1,18 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "summaryHandler", function () {
+  return summaryHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+const btnSummary = document.querySelector(".summary__btn");
+const summaryHandler = function (publisher) {
+  btnSummary.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnSummaryClick++;
+    let shouldCallAlgos = _configGlobalVar.globalVar.btnSummaryClick === 1;
+    if (shouldCallAlgos) {
+      publisher(processId, arrivalTimes, burstTimes, priorities, quantum);
+    }
+    displayAvgTt();
+    displayChart();
+  });
+};

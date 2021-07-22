@@ -1,0 +1,58 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displayAvgTt", function () {
+  return displayAvgTt;
+});
+_parcelHelpers.export(exports, "summaryHandler", function () {
+  return summaryHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+const processAvgTTRows = document.querySelector(".process__info-avg-tt-box");
+const btnSummary = document.querySelector(".summary__btn");
+const displayAvgTt = function (sort = false) {
+  processAvgTTRows.innerHTML = "";
+  if (sort) {
+    const sortedavgTtimes = _configGlobalVar.globalVar.avgTurnaroundTimes.slice().sort((a, b) => a.Avgtt - b.Avgtt);
+    var minAvgtt = sortedavgTtimes[0].Avgtt;
+    sortedavgTtimes.forEach(function (sortedavgTtime) {
+      if (minAvgtt === sortedavgTtime.Avgtt) {
+        var html = `
+            <div class="row process__row process__row--effective">
+              <div class="col-md-6 process__desc process__desc--color">${sortedavgTtime.Process} Scheduling</div>
+              <div class="col-md-6 process__time">${+sortedavgTtime.Avgtt.toFixed(2)}s</div>
+            </div>
+            `;
+      } else {
+        var html = `
+            <div class="row process__row">
+              <div class="col-md-6 process__desc">${sortedavgTtime.Process} Scheduling</div>
+              <div class="col-md-6 process__time">${+sortedavgTtime.Avgtt.toFixed(2)}s</div>
+            </div>
+            `;
+      }
+      processAvgTTRows.insertAdjacentHTML("beforeend", html);
+    });
+  }
+  if (!sort) {
+    avgTurnaroundTimes.forEach(function (avgTurnaroundTime) {
+      var html = `
+        <div class="row process__row">
+        <div class="col-md-6 process__desc">${avgTurnaroundTime.Process} Scheduling</div>
+              <div class="col-md-6 process__time">${+avgTurnaroundTime.Avgtt.toFixed(2)}s</div>
+                </div>
+                `;
+      processAvgTTRows.insertAdjacentHTML("beforeend", html);
+    });
+  }
+};
+const summaryHandler = function (publisher) {
+  btnSummary.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnSummaryClick++;
+    let shouldCallAlgos = _configGlobalVar.globalVar.btnSummaryClick === 1;
+    if (shouldCallAlgos) {
+      publisher(processId, arrivalTimes, burstTimes, priorities, quantum);
+    }
+    displayAvgTt();
+    displayChart();
+  });
+};

@@ -7,6 +7,8 @@ import * as sjfNonPreView from "../views/sjfView/sjfNPreView";
 import * as roundRobinView from "../views/roundRobinView/rrView";
 import * as prePriorityView from "../views/priorityView/prePriorityView";
 import * as nonPrePriorityView from "../views/priorityView/nonPrePriorityView";
+import * as summaryView from "../views/summaryView/summaryView";
+
 import * as fcfsModel from "../models/fcfsAlgo";
 import * as sjfPreModel from "../models/sjfPreAlgo";
 import * as sjfNonPreModel from "../models/sjfNPreAlgo";
@@ -98,6 +100,54 @@ const nonPrePriorityController = function (
   );
 };
 
+const summaryController = function (
+  processId,
+  arrivalTimes,
+  burstTimes,
+  priorities,
+  quantum
+) {
+  fcfsModel.FCFS(
+    processId,
+    arrivalTimes,
+    burstTimes,
+    fcfsView.displayFinalProcess
+  );
+  prePriorityModel.priorityPremptive(
+    processId,
+    burstTimes,
+    priorities,
+    arrivalTimes,
+    prePriorityView.displayPriorityPremptive
+  );
+  nonPrePriorityModel.priorityNonPreemptive(
+    processId,
+    burstTimes,
+    priorities,
+    arrivalTimes,
+    nonPrePriorityView.displayNonPriorityPremptive
+  );
+  sjfPreModel.SjfPreemptive(
+    processId,
+    burstTimes,
+    arrivalTimes,
+    sjfPreView.displaySjfPrProcess
+  );
+  sjfNonPreModel.SjfNonPreemptive(
+    processId,
+    burstTimes,
+    arrivalTimes,
+    sjfNonPreView.displaySjfNprprocess
+  );
+  roundRobinModel.roundRobin(
+    processId,
+    burstTimes,
+    quantum,
+    arrivalTimes,
+    roundRobinView.displayRRProcess
+  );
+};
+
 const init = function () {
   displayProcessView.displayProcessesHandler(displayProcessController);
   modalView.modalHandler();
@@ -108,5 +158,6 @@ const init = function () {
   roundRobinView.roundRobinHandler(roundRobinController);
   prePriorityView.prePriorityHandler(prePriorityController);
   nonPrePriorityView.nonPrePriorityHandler(nonPrePriorityController);
+  summaryView.summaryHandler(summaryController);
 };
 init();
