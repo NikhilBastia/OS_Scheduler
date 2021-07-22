@@ -1,0 +1,36 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displaySjfNprprocess", function () {
+  return displaySjfNprprocess;
+});
+_parcelHelpers.export(exports, "sjfNonPreHandler", function () {
+  return sjfNonPreHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+var _tabUtils = require("../tabUtils");
+const processSJFNPrRows = document.querySelector(".process__info-sjfnpr-box");
+const sjfNScheduling = document.querySelector(".nav__menu-item__sjf-npr");
+_tabUtils.tabfunctionality();
+const displaySjfNprprocess = function (pid, arrival, burst, waiting, turnaround) {
+  const html = `
+      <div class="row process__row">
+          <div class="col-md-3 process__desc">Process ${pid}</div>
+          <div class="col-md-9">
+              <div class="row">
+                  <div class="col-md-3 process__time">${arrival}</div>
+                  <div class="col-md-3 process__time">${burst}</div>
+                  <div class="col-md-3 process__time">${waiting}</div>
+                  <div class="col-md-3 process__time">${turnaround}</div>
+              </div>
+          </div>
+      </div>
+      `;
+  processSJFNPrRows.insertAdjacentHTML("beforeend", html);
+};
+const sjfNonPreHandler = function (publisher) {
+  sjfNScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnSjfNonPrClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnSjfNonPrClick === 1 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.arrivalTimes);
+  });
+};

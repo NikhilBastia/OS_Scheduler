@@ -1,0 +1,15 @@
+var _viewsDisplayProcessViewDProcessView = require("../views/displayProcessView/dProcessView");
+var _viewsFcfsViewFcfsView = require("../views/fcfsView/fcfsView");
+var _modelsFcfsAlgo = require("../models/fcfsAlgo");
+const displayProcessController = function (arrivalTime, priority, burstTime) {
+  _viewsDisplayProcessViewDProcessView.displayProcesses(arrivalTime, priority, burstTime);
+};
+const fcfsSchedulingController = function (processId, arrivalTimes, burstTimes) {
+  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes, _viewsFcfsViewFcfsView.displayFinalProcess);
+};
+const sjfPreSchedulingController = function (processId, arrivalTimes, burstTimes) {};
+const init = function () {
+  _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
+  _viewsFcfsViewFcfsView.fcfsHandler(fcfsSchedulingController);
+};
+init();

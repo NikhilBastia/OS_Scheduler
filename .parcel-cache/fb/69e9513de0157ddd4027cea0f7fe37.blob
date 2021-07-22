@@ -1,0 +1,11 @@
+var _configGlobalVar = require("../../config/globalVar");
+var _tabUtils = require("../tabUtils");
+const priorityNScheduling = document.querySelector(".nav__menu-item__prio-npr");
+_tabUtils.tabfunctionality();
+const nonPrePriorityHandler = function (publisher) {
+  priorityNScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnpriorityNonPrempClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnpriorityNonPrempClick === 1 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.priorities, _configGlobalVar.globalVar.arrivalTimes);
+  });
+};

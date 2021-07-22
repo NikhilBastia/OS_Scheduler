@@ -429,21 +429,52 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"3K3IO":[function(require,module,exports) {
 var _viewsDisplayProcessViewDProcessView = require("../views/displayProcessView/dProcessView");
-var _viewsFcfsView = require("../views/fcfsView");
+var _viewsFcfsViewFcfsView = require("../views/fcfsView/fcfsView");
+var _viewsSjfViewSjfPreView = require("../views/sjfView/sjfPreView");
+var _viewsSjfViewSjfNPreView = require("../views/sjfView/sjfNPreView");
+var _viewsRoundRobinViewRrView = require("../views/roundRobinView/rrView");
+var _viewsPriorityViewPrePriorityView = require("../views/priorityView/prePriorityView");
+var _viewsPriorityViewNonPrePriorityView = require("../views/priorityView/nonPrePriorityView");
 var _modelsFcfsAlgo = require("../models/fcfsAlgo");
+var _modelsSjfPreAlgo = require("../models/sjfPreAlgo");
+var _modelsSjfNPreAlgo = require("../models/sjfNPreAlgo");
+var _modelsRrAlgo = require("../models/rrAlgo");
+var _modelsPrePriorityAlgo = require("../models/prePriorityAlgo");
+var _modelsNonPrePriorityAlgo = require("../models/nonPrePriorityAlgo");
 const displayProcessController = function (arrivalTime, priority, burstTime) {
   _viewsDisplayProcessViewDProcessView.displayProcesses(arrivalTime, priority, burstTime);
 };
 const fcfsSchedulingController = function (processId, arrivalTimes, burstTimes) {
-  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes, _viewsFcfsView.displayFinalProcess);
+  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes, _viewsFcfsViewFcfsView.displayFinalProcess);
+};
+const sjfPreSchedulingController = function (processId, burstTimes, arrivalTimes) {
+  _modelsSjfPreAlgo.SjfPreemptive(processId, burstTimes, arrivalTimes, _viewsSjfViewSjfPreView.displaySjfPrProcess);
+};
+const sjfNonPreController = function (processId, burstTimes, arrivalTimes) {
+  _modelsSjfNPreAlgo.SjfNonPreemptive(processId, burstTimes, arrivalTimes, _viewsSjfViewSjfNPreView.displaySjfNprprocess);
+};
+const roundRobinController = function (processId, burstTimes, quantum, arrivalTimes) {
+  _modelsRrAlgo.roundRobin(processId, burstTimes, quantum, arrivalTimes, _viewsRoundRobinViewRrView.displayRRProcess);
+};
+const prePriorityController = function (processId, burstTimes, priorities, arrivalTimes) {
+  _modelsPrePriorityAlgo.priorityPremptive(processId, burstTimes, priorities, arrivalTimes, _viewsPriorityViewPrePriorityView.displayPriorityPremptive);
+};
+const nonPrePriorityController = function (processId, burstTimes, priorities, arrivalTimes) {
+  _modelsNonPrePriorityAlgo.priorityNonPreemptive(processId, burstTimes, priorities, arrivalTimes, _viewsPriorityViewNonPrePriorityView.displayNonPriorityPremptive);
 };
 const init = function () {
   _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
-  _viewsFcfsView.fcfsHandler(fcfsSchedulingController);
+  _viewsFcfsViewFcfsView.arrowHandler(fcfsSchedulingController);
+  _viewsFcfsViewFcfsView.fcfsHandler(fcfsSchedulingController);
+  _viewsSjfViewSjfPreView.sjfPreHandler(sjfPreSchedulingController);
+  _viewsSjfViewSjfNPreView.sjfNonPreHandler(sjfNonPreController);
+  _viewsRoundRobinViewRrView.roundRobinHandler(roundRobinController);
+  _viewsPriorityViewPrePriorityView.prePriorityHandler(prePriorityController);
+  _viewsPriorityViewNonPrePriorityView.nonPrePriorityHandler(nonPrePriorityController);
 };
 init();
 
-},{"../views/displayProcessView/dProcessView":"fWIKj","../views/fcfsView":"7AX4n","../models/fcfsAlgo":"6q9nR"}],"fWIKj":[function(require,module,exports) {
+},{"../views/displayProcessView/dProcessView":"fWIKj","../models/fcfsAlgo":"6q9nR","../views/fcfsView/fcfsView":"7pm9g","../models/sjfPreAlgo":"4FliK","../views/sjfView/sjfPreView":"7mTOt","../views/sjfView/sjfNPreView":"557yL","../models/sjfNPreAlgo":"77CQL","../models/rrAlgo":"2mloc","../views/roundRobinView/rrView":"7BmXL","../views/priorityView/prePriorityView":"5MMle","../models/prePriorityAlgo":"3o5Kr","../views/priorityView/nonPrePriorityView":"78wRd","../models/nonPrePriorityAlgo":"23QfT"}],"fWIKj":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 _parcelHelpers.export(exports, "displayProcesses", function () {
@@ -481,7 +512,7 @@ const displayProcessesHandler = function (publisher) {
     const arrivalTime = Number(inputArrival.value);
     const priority = Number(inputPriority.value);
     const burstTime = Number(inputBurst.value);
-    const quantum = Number(inputQuantum.value);
+    _configGlobalVar.globalVar.quantum = Number(inputQuantum.value);
     const pushError = inputArrival.value === "" || inputBurst.value === "" || inputQuantum.value === "";
     if (pushError) {
       errorMsgs.push("Please fill all the inputs");
@@ -584,70 +615,7 @@ exports.export = function (dest, destName, get) {
     get: get
   });
 };
-},{}],"7AX4n":[function(require,module,exports) {
-var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
-_parcelHelpers.defineInteropFlag(exports);
-_parcelHelpers.export(exports, "displayFinalProcess", function () {
-  return displayFinalProcess;
-});
-_parcelHelpers.export(exports, "fcfsHandler", function () {
-  return fcfsHandler;
-});
-var _configGlobalVar = require("../config/globalVar");
-var _tabUtils = require("./tabUtils");
-const fcfsScheduling = document.querySelector(".nav__menu-item__FCFS");
-const processFCFSRows = document.querySelector(".process__info-fcfs-box");
-_tabUtils.tabfunctionality();
-const displayFinalProcess = function (pid, arrival, burst, completion, waiting, turnaround) {
-  console.log("in displayFinalProcess");
-  const html = `
-    <div class="row process__row">
-                <div class="col-md-3 process__desc">Process ${pid}</div>
-                <div class="col-md-9">
-                    <div class="row">
-                        <div class="col-md-3 process__time">${arrival}</div>
-                        <div class="col-md-3 process__time">${burst}</div>
-                        <div class="col-md-3 process__time">${waiting}</div>
-                        <div class="col-md-3 process__time">${turnaround}</div>
-                    </div>
-                </div>
-            </div>
-    `;
-  processFCFSRows.insertAdjacentHTML("beforeend", html);
-};
-const fcfsHandler = function (publisher) {
-  fcfsScheduling.addEventListener("click", function () {
-    _configGlobalVar.globalVar.btnfcfsClick++;
-    let shouldCallAlgo = _configGlobalVar.globalVar.btnfcfsClick === 1 && _configGlobalVar.globalVar.btnAlgoClick === 0 && _configGlobalVar.globalVar.btnSummaryClick === 0;
-    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.arrivalTimes, _configGlobalVar.globalVar.burstTimes);
-  });
-};
-
-},{"../config/globalVar":"468k9","./tabUtils":"2RHhe","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"2RHhe":[function(require,module,exports) {
-var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
-_parcelHelpers.defineInteropFlag(exports);
-_parcelHelpers.export(exports, "tabfunctionality", function () {
-  return tabfunctionality;
-});
-const tabs = document.querySelectorAll("[data-tab-target]");
-const tabContents = document.querySelectorAll("[data-tab-content]");
-const tabfunctionality = function () {
-  tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      const target = document.querySelector(tab.dataset.tabTarget);
-      tabContents.forEach(tabContent => {
-        tabContent.classList.remove("active-state");
-      });
-      tabs.forEach(tab => {
-        tab.classList.remove("active-state");
-      });
-      tab.classList.add("active-state");
-      target.classList.add("active-state");
-    });
-  });
-};
-
-},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"6q9nR":[function(require,module,exports) {
+},{}],"6q9nR":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 _parcelHelpers.export(exports, "FCFS", function () {
@@ -706,6 +674,667 @@ const FCFS = function (processID, arrivalTime, burstTime, publisherView) {
   });
 };
 
-},{"../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}]},["2aKhF","3K3IO"], "3K3IO", "parcelRequire575a")
+},{"../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"7pm9g":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displayFinalProcess", function () {
+  return displayFinalProcess;
+});
+_parcelHelpers.export(exports, "arrowHandler", function () {
+  return arrowHandler;
+});
+_parcelHelpers.export(exports, "fcfsHandler", function () {
+  return fcfsHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+var _tabUtils = require("../tabUtils");
+const fcfsScheduling = document.querySelector(".nav__menu-item__FCFS");
+const processFCFSRows = document.querySelector(".process__info-fcfs-box");
+const btnAlgo = document.querySelector(".process__btn");
+_tabUtils.tabfunctionality();
+const displayFinalProcess = function (pid, arrival, burst, completion, waiting, turnaround) {
+  console.log("in displayFinalProcess");
+  const html = `
+    <div class="row process__row">
+                <div class="col-md-3 process__desc">Process ${pid}</div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-3 process__time">${arrival}</div>
+                        <div class="col-md-3 process__time">${burst}</div>
+                        <div class="col-md-3 process__time">${waiting}</div>
+                        <div class="col-md-3 process__time">${turnaround}</div>
+                    </div>
+                </div>
+            </div>
+    `;
+  processFCFSRows.insertAdjacentHTML("beforeend", html);
+};
+const arrowHandler = function (publisher) {
+  btnAlgo.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnAlgoClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnAlgoClick === 1 && _configGlobalVar.globalVar.btnfcfsClick === 0 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.arrivalTimes, _configGlobalVar.globalVar.burstTimes);
+  });
+};
+const fcfsHandler = function (publisher) {
+  fcfsScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnfcfsClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnfcfsClick === 1 && _configGlobalVar.globalVar.btnAlgoClick === 0 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.arrivalTimes, _configGlobalVar.globalVar.burstTimes);
+  });
+};
+
+},{"../../config/globalVar":"468k9","../tabUtils":"2RHhe","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"2RHhe":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "tabfunctionality", function () {
+  return tabfunctionality;
+});
+const tabs = document.querySelectorAll("[data-tab-target]");
+const tabContents = document.querySelectorAll("[data-tab-content]");
+const tabfunctionality = function () {
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const target = document.querySelector(tab.dataset.tabTarget);
+      tabContents.forEach(tabContent => {
+        tabContent.classList.remove("active-state");
+      });
+      tabs.forEach(tab => {
+        tab.classList.remove("active-state");
+      });
+      tab.classList.add("active-state");
+      target.classList.add("active-state");
+    });
+  });
+};
+
+},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"4FliK":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "SjfPreemptive", function () {
+  return SjfPreemptive;
+});
+var _configGlobalVar = require("../config/globalVar");
+const SjfPreemptive = function (pid, burst_time, arrival_time, publisherView) {
+  var start_time = [], completion_time = [], turnaround_time = [], waiting_time = [];
+  var avg_turnaround_time;
+  var avg_waiting_time;
+  var total_turnaround_time = 0;
+  var total_waiting_time = 0;
+  var burst_remaining = [];
+  var is_completed = [];
+  var n = arrival_time.length;
+  var updateUI;
+  for (var i = 0; i < n; i++) {
+    is_completed[i] = 0;
+    burst_remaining[i] = burst_time[i];
+  }
+  var current_time = 0;
+  var completed = 0;
+  var prev = 0;
+  while (completed != n) {
+    var idx = -1;
+    var mn = 10000000;
+    for (var i = 0; i < n; i++) {
+      if (arrival_time[i] <= current_time && is_completed[i] == 0) {
+        if (burst_remaining[i] < mn) {
+          mn = burst_remaining[i];
+          idx = i;
+        }
+        if (burst_remaining[i] == mn) {
+          if (arrival_time[i] < arrival_time[idx]) {
+            mn = burst_remaining[i];
+            idx = i;
+          }
+        }
+      }
+    }
+    if (idx != -1) {
+      if (burst_remaining[idx] == burst_time[idx]) {
+        start_time[idx] = current_time;
+      }
+      burst_remaining[idx] -= 1;
+      current_time++;
+      prev = current_time;
+      if (burst_remaining[idx] == 0) {
+        completion_time[idx] = current_time;
+        turnaround_time[idx] = completion_time[idx] - arrival_time[idx];
+        waiting_time[idx] = turnaround_time[idx] - burst_time[idx];
+        total_turnaround_time += turnaround_time[idx];
+        total_waiting_time += waiting_time[idx];
+        // display UI for SJF(PR) Sched.
+        _configGlobalVar.globalVar.sjfPrUITrigger++;
+        updateUI = _configGlobalVar.globalVar.sjfPrUITrigger <= n;
+        if (updateUI) publisherView(pid[idx], arrival_time[idx], burst_time[idx], waiting_time[idx], turnaround_time[idx]);
+        is_completed[idx] = 1;
+        completed++;
+      }
+    } else {
+      current_time++;
+    }
+  }
+  var min_arrival_time = 10000000;
+  var max_completion_time = -1;
+  for (var i = 0; i < n; i++) {
+    min_arrival_time = Math.min(min_arrival_time, arrival_time[i]);
+    max_completion_time = Math.max(max_completion_time, completion_time[i]);
+  }
+  avg_turnaround_time = parseFloat(total_turnaround_time) / parseFloat(n);
+  avg_waiting_time = parseFloat(total_waiting_time) / parseFloat(n);
+  for (var i = 0; i < n; i++) {
+    console.log(pid[i], arrival_time[i], burst_time[i], completion_time[i], turnaround_time[i], waiting_time[i]);
+  }
+  _configGlobalVar.globalVar.sjfPrTtPushed++;
+  if (_configGlobalVar.globalVar.sjfPrTtPushed === 1) _configGlobalVar.globalVar.avgTurnaroundTimes.push({
+    Process: "SJF (Preemptive)",
+    Avgtt: avg_turnaround_time
+  });
+};
+
+},{"../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"7mTOt":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displaySjfPrProcess", function () {
+  return displaySjfPrProcess;
+});
+_parcelHelpers.export(exports, "sjfPreHandler", function () {
+  return sjfPreHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+var _tabUtils = require("../tabUtils");
+const processSJFPrRows = document.querySelector(".process__info-sjfpr-box");
+const sjfScheduling = document.querySelector(".nav__menu-item__Sjf-pr");
+_tabUtils.tabfunctionality();
+const displaySjfPrProcess = function (pid, arrival, burst, waiting, turnaround) {
+  const html = `
+      <div class="row process__row">
+          <div class="col-md-3 process__desc">Process ${pid}</div>
+          <div class="col-md-9">
+              <div class="row">
+                  <div class="col-md-3 process__time">${arrival}</div>
+                  <div class="col-md-3 process__time">${burst}</div>
+                  <div class="col-md-3 process__time">${waiting}</div>
+                  <div class="col-md-3 process__time">${turnaround}</div>
+              </div>
+          </div>
+      </div>
+      `;
+  processSJFPrRows.insertAdjacentHTML("beforeend", html);
+};
+const sjfPreHandler = function (publisher) {
+  sjfScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnSjfPremClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnSjfPremClick === 1 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.arrivalTimes);
+  });
+};
+
+},{"../../config/globalVar":"468k9","../tabUtils":"2RHhe","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"557yL":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displaySjfNprprocess", function () {
+  return displaySjfNprprocess;
+});
+_parcelHelpers.export(exports, "sjfNonPreHandler", function () {
+  return sjfNonPreHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+var _tabUtils = require("../tabUtils");
+const processSJFNPrRows = document.querySelector(".process__info-sjfnpr-box");
+const sjfNScheduling = document.querySelector(".nav__menu-item__sjf-npr");
+_tabUtils.tabfunctionality();
+const displaySjfNprprocess = function (pid, arrival, burst, waiting, turnaround) {
+  const html = `
+      <div class="row process__row">
+          <div class="col-md-3 process__desc">Process ${pid}</div>
+          <div class="col-md-9">
+              <div class="row">
+                  <div class="col-md-3 process__time">${arrival}</div>
+                  <div class="col-md-3 process__time">${burst}</div>
+                  <div class="col-md-3 process__time">${waiting}</div>
+                  <div class="col-md-3 process__time">${turnaround}</div>
+              </div>
+          </div>
+      </div>
+      `;
+  processSJFNPrRows.insertAdjacentHTML("beforeend", html);
+};
+const sjfNonPreHandler = function (publisher) {
+  sjfNScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnSjfNonPrClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnSjfNonPrClick === 1 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.arrivalTimes);
+  });
+};
+
+},{"../../config/globalVar":"468k9","../tabUtils":"2RHhe","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"77CQL":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "SjfNonPreemptive", function () {
+  return SjfNonPreemptive;
+});
+var _configGlobalVar = require("../config/globalVar");
+const SjfNonPreemptive = function (pid, burst_time, arrival_time, publisherView) {
+  var start_time = [], completion_time = [], turnaround_time = [], waiting_time = [];
+  var avg_turnaround_time;
+  var avg_waiting_time;
+  var total_turnaround_time = 0;
+  var total_waiting_time = 0;
+  var is_completed = [];
+  var n = arrival_time.length;
+  var updateUI;
+  for (var i = 0; i < n; i++) {
+    is_completed[i] = 0;
+  }
+  var current_time = 0;
+  var completed = 0;
+  var prev = 0;
+  while (completed != n) {
+    var idx = -1;
+    var mn = 10000000;
+    for (var i = 0; i < n; i++) {
+      if (arrival_time[i] <= current_time && is_completed[i] == 0) {
+        if (burst_time[i] < mn) {
+          mn = burst_time[i];
+          idx = i;
+        }
+        if (burst_time[i] == mn) {
+          if (arrival_time[i] < arrival_time[idx]) {
+            mn = burst_time[i];
+            idx = i;
+          }
+        }
+      }
+    }
+    if (idx != -1) {
+      start_time[idx] = current_time;
+      completion_time[idx] = start_time[idx] + burst_time[idx];
+      turnaround_time[idx] = completion_time[idx] - arrival_time[idx];
+      waiting_time[idx] = turnaround_time[idx] - burst_time[idx];
+      // display UI for SJF(PR) Sched.
+      _configGlobalVar.globalVar.sjfNPrUITrigger++;
+      updateUI = _configGlobalVar.globalVar.sjfNPrUITrigger <= n;
+      if (updateUI) publisherView(pid[idx], arrival_time[idx], burst_time[idx], waiting_time[idx], turnaround_time[idx]);
+      total_turnaround_time += turnaround_time[idx];
+      total_waiting_time += waiting_time[idx];
+      is_completed[idx] = 1;
+      completed++;
+      current_time = completion_time[idx];
+      prev = current_time;
+    } else {
+      current_time++;
+    }
+  }
+  var min_arrival_time = 10000000;
+  var max_completion_time = -1;
+  for (var i = 0; i < n; i++) {
+    min_arrival_time = Math.min(min_arrival_time, arrival_time[i]);
+    max_completion_time = Math.max(max_completion_time, completion_time[i]);
+  }
+  avg_turnaround_time = parseFloat(total_turnaround_time) / parseFloat(n);
+  avg_waiting_time = parseFloat(total_waiting_time) / parseFloat(n);
+  _configGlobalVar.globalVar.sjfNPrTtPushed++;
+  if (_configGlobalVar.globalVar.sjfNPrTtPushed === 1) _configGlobalVar.globalVar.avgTurnaroundTimes.push({
+    Process: "SJF (Non-Preemptive)",
+    Avgtt: avg_turnaround_time
+  });
+};
+
+},{"../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"2mloc":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "roundRobin", function () {
+  return roundRobin;
+});
+var _configGlobalVar = require("../config/globalVar");
+const roundRobin = function (pid, bt, quantum, at, publisherView) {
+  var proc = [], temp;
+  var n = at.length;
+  var updateUI;
+  for (var i = 0; i < n; i++) {
+    temp = {
+      pid: pid[i],
+      arrival_time: at[i],
+      burst_time: bt[i],
+      start_time: 0,
+      completion_time: 0,
+      turnaround_time: 0,
+      waiting_time: 0
+    };
+    proc.push(temp);
+  }
+  var avg_turnaround_time;
+  var avg_waiting_time;
+  var total_turnaround_time = 0;
+  var total_waiting_time = 0;
+  var burst_remaining = [];
+  for (var i = 0; i < n; i++) {
+    burst_remaining[i] = proc[i].burst_time;
+  }
+  var idx;
+  proc.sort(function (a, b) {
+    return a.arrival_time - b.arrival_time;
+  });
+  var q = [];
+  var current_time = 0;
+  q.push(0);
+  var completed = 0;
+  var mark = [];
+  for (var i = 0; i < n; i++) {
+    mark[i] = 0;
+  }
+  mark[0] = 1;
+  while (completed != n) {
+    idx = q.shift();
+    if (burst_remaining[idx] === proc[idx].burst_time) {
+      proc[idx].start_time = Math.max(current_time, proc[idx].arrival_time);
+      current_time = proc[idx].start_time;
+    }
+    if (burst_remaining[idx] - quantum > 0) {
+      burst_remaining[idx] -= quantum;
+      current_time += quantum;
+    } else {
+      current_time += burst_remaining[idx];
+      burst_remaining[idx] = 0;
+      completed++;
+      proc[idx].completion_time = current_time;
+      proc[idx].turnaround_time = proc[idx].completion_time - proc[idx].arrival_time;
+      proc[idx].waiting_time = proc[idx].turnaround_time - proc[idx].burst_time;
+      // display UI for Round-Robin Sched.
+      _configGlobalVar.globalVar.roundRobinUITrigger++;
+      updateUI = _configGlobalVar.globalVar.roundRobinUITrigger <= n;
+      if (updateUI) publisherView(proc[idx].pid, proc[idx].arrival_time, proc[idx].burst_time, proc[idx].waiting_time, proc[idx].turnaround_time);
+      total_turnaround_time += proc[idx].turnaround_time;
+      total_waiting_time += proc[idx].waiting_time;
+    }
+    for (var i = 1; i < n; i++) {
+      if (burst_remaining[i] > 0 && proc[i].arrival_time <= current_time && mark[i] == 0) {
+        q.push(i);
+        mark[i] = 1;
+      }
+    }
+    if (burst_remaining[idx] > 0) {
+      q.push(idx);
+    }
+    if (q.length == 0) {
+      for (var i = 1; i < n; i++) {
+        if (burst_remaining[i] > 0) {
+          q.push(i);
+          mark[i] = 1;
+          break;
+        }
+      }
+    }
+  }
+  var avg_waiting_time = parseFloat(total_waiting_time) / parseFloat(n);
+  var avg_turnaround_time = parseFloat(total_turnaround_time) / parseFloat(n);
+  proc.sort(function (a, b) {
+    return a.pid - b.pid;
+  });
+  _configGlobalVar.globalVar.rrTtPushed++;
+  if (_configGlobalVar.globalVar.rrTtPushed === 1) _configGlobalVar.globalVar.avgTurnaroundTimes.push({
+    Process: "Round Robin",
+    Avgtt: avg_turnaround_time
+  });
+};
+
+},{"../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"7BmXL":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displayRRProcess", function () {
+  return displayRRProcess;
+});
+_parcelHelpers.export(exports, "roundRobinHandler", function () {
+  return roundRobinHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+var _tabUtils = require("../tabUtils");
+const processRRRows = document.querySelector(".process__info-rr-box");
+const rrScheduling = document.querySelector(".nav__menu-item__RR");
+_tabUtils.tabfunctionality();
+const displayRRProcess = function (pid, arrival, burst, waiting, turnaround) {
+  const html = `
+      <div class="row process__row">
+          <div class="col-md-3 process__desc">Process ${pid}</div>
+          <div class="col-md-9">
+              <div class="row">
+                  <div class="col-md-3 process__time">${arrival}</div>
+                  <div class="col-md-3 process__time">${burst}</div>
+                  <div class="col-md-3 process__time">${waiting}</div>
+                  <div class="col-md-3 process__time">${turnaround}</div>
+              </div>
+          </div>
+      </div>
+      `;
+  processRRRows.insertAdjacentHTML("beforeend", html);
+};
+const roundRobinHandler = function (publisher) {
+  rrScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnRRClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnRRClick === 1 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.quantum, _configGlobalVar.globalVar.arrivalTimes);
+  });
+};
+
+},{"../../config/globalVar":"468k9","../tabUtils":"2RHhe","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"5MMle":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displayPriorityPremptive", function () {
+  return displayPriorityPremptive;
+});
+_parcelHelpers.export(exports, "prePriorityHandler", function () {
+  return prePriorityHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+var _tabUtils = require("../tabUtils");
+const processPriorityRows = document.getElementById("process__info-priority-box");
+const priorityScheduling = document.querySelector(".nav__menu-item__prio-pr");
+_tabUtils.tabfunctionality();
+const displayPriorityPremptive = function (pid, arrival, burst, priority, waiting, turnaround) {
+  const html = `
+      <div class="row process__row">
+          <div class="col-md-2 process__desc">Process ${pid}</div>
+          <div class="col-md-2 process__time">${arrival}</div>
+          <div class="col-md-2 process__time">${burst}</div>
+          <div class="col-md-2 process__time">${priority}</div>
+          <div class="col-md-2 process__time">${waiting}</div>
+          <div class="col-md-2 process__time">${turnaround}</div>
+      </div>
+      `;
+  processPriorityRows.insertAdjacentHTML("beforeend", html);
+};
+const prePriorityHandler = function (publisher) {
+  priorityScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnpriorityPrempClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnpriorityPrempClick === 1 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.priorities, _configGlobalVar.globalVar.arrivalTimes);
+  });
+};
+
+},{"../../config/globalVar":"468k9","../tabUtils":"2RHhe","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"3o5Kr":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "priorityPremptive", function () {
+  return priorityPremptive;
+});
+var _configGlobalVar = require("../config/globalVar");
+const priorityPremptive = function (pid, burst_time, priority, arrival_time, publisherView) {
+  var avg_turnaround_time, avg_waiting_time;
+  var total_turnaround_time = 0, total_waiting_time = 0;
+  var burst_remaining = [], is_completed = [];
+  var start_time = [], completion_time = [], turnaround_time = [], waiting_time = [];
+  var current_time = 0, completed = 0, prev = 0;
+  var n = arrival_time.length;
+  var updateUI;
+  for (var i = 0; i < n; i++) {
+    is_completed[i] = 0;
+    burst_remaining[i] = burst_time[i];
+  }
+  while (completed != n) {
+    var idx = -1;
+    var mx = -1;
+    for (var i = 0; i < n; i++) {
+      if (arrival_time[i] <= current_time && is_completed[i] == 0) {
+        if (priority[i] > mx) {
+          mx = priority[i];
+          idx = i;
+        }
+        if (priority[i] == mx) {
+          if (arrival_time[i] < arrival_time[idx]) {
+            mx = priority[i];
+            idx = i;
+          }
+        }
+      }
+    }
+    if (idx != -1) {
+      if (burst_remaining[idx] == burst_time[idx]) {
+        start_time[idx] = current_time;
+      }
+      burst_remaining[idx] -= 1;
+      current_time++;
+      prev = current_time;
+      if (burst_remaining[idx] == 0) {
+        completion_time[idx] = current_time;
+        turnaround_time[idx] = completion_time[idx] - arrival_time[idx];
+        waiting_time[idx] = turnaround_time[idx] - burst_time[idx];
+        // display UI for Priority(Pr) Sched.
+        _configGlobalVar.globalVar.priorityPrUITrigger++;
+        updateUI = _configGlobalVar.globalVar.priorityPrUITrigger <= n;
+        if (updateUI) publisherView(pid[idx], arrival_time[idx], burst_time[idx], priority[idx], waiting_time[idx], turnaround_time[idx]);
+        total_turnaround_time += turnaround_time[idx];
+        total_waiting_time += waiting_time[idx];
+        is_completed[idx] = 1;
+        completed++;
+      }
+    } else {
+      current_time++;
+    }
+  }
+  var min_arrival_time = 10000000;
+  var max_completion_time = -1;
+  for (var i = 0; i < n; i++) {
+    min_arrival_time = Math.min(min_arrival_time, arrival_time[i]);
+    max_completion_time = Math.max(max_completion_time, completion_time[i]);
+  }
+  avg_turnaround_time = total_turnaround_time / n;
+  avg_waiting_time = total_waiting_time / n;
+  _configGlobalVar.globalVar.priorityPrTtPushed++;
+  if (_configGlobalVar.globalVar.priorityPrTtPushed === 1) _configGlobalVar.globalVar.avgTurnaroundTimes.push({
+    Process: "Priority (Preemptive)",
+    Avgtt: avg_turnaround_time
+  });
+};
+
+},{"../config/globalVar":"468k9","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"78wRd":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "displayNonPriorityPremptive", function () {
+  return displayNonPriorityPremptive;
+});
+_parcelHelpers.export(exports, "nonPrePriorityHandler", function () {
+  return nonPrePriorityHandler;
+});
+var _configGlobalVar = require("../../config/globalVar");
+var _tabUtils = require("../tabUtils");
+const processNonPriorityRows = document.getElementById("process__info-non-priority-box");
+const priorityNScheduling = document.querySelector(".nav__menu-item__prio-npr");
+_tabUtils.tabfunctionality();
+const displayNonPriorityPremptive = function (pid, arrival, burst, priority, waiting, turnaround) {
+  const html = `
+      <div class="row process__row">
+          <div class="col-md-2 process__desc">Process ${pid}</div>
+          <div class="col-md-2 process__time">${arrival}</div>
+          <div class="col-md-2 process__time">${burst}</div>
+          <div class="col-md-2 process__time">${priority}</div>
+          <div class="col-md-2 process__time">${waiting}</div>
+          <div class="col-md-2 process__time">${turnaround}</div>
+      </div>
+      `;
+  processNonPriorityRows.insertAdjacentHTML("beforeend", html);
+};
+const nonPrePriorityHandler = function (publisher) {
+  priorityNScheduling.addEventListener("click", function () {
+    _configGlobalVar.globalVar.btnpriorityNonPrempClick++;
+    let shouldCallAlgo = _configGlobalVar.globalVar.btnpriorityNonPrempClick === 1 && _configGlobalVar.globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo) publisher(_configGlobalVar.globalVar.processId, _configGlobalVar.globalVar.burstTimes, _configGlobalVar.globalVar.priorities, _configGlobalVar.globalVar.arrivalTimes);
+  });
+};
+
+},{"../../config/globalVar":"468k9","../tabUtils":"2RHhe","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"23QfT":[function(require,module,exports) {
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "priorityNonPreemptive", function () {
+  return priorityNonPreemptive;
+});
+var _configGlobalVar = require("../config/globalVar");
+const priorityNonPreemptive = function (pid, burst_time, priority, arrival_time, publisherView) {
+  var start_time = [], completion_time = [], turnaround_time = [], waiting_time = [];
+  var avg_turnaround_time, avg_waiting_time;
+  var total_turnaround_time = 0, total_waiting_time = 0;
+  var is_completed = [];
+  var n = arrival_time.length;
+  var updateUI;
+  for (var i = 0; i < n; i++) {
+    is_completed[i] = 0;
+  }
+  var current_time = 0;
+  var completed = 0;
+  var prev = 0;
+  while (completed != n) {
+    var idx = -1;
+    var mx = -1;
+    for (var i = 0; i < n; i++) {
+      if (arrival_time[i] <= current_time && is_completed[i] == 0) {
+        if (priority[i] > mx) {
+          mx = priority[i];
+          idx = i;
+        }
+        if (priority[i] == mx) {
+          if (arrival_time[i] < arrival_time[idx]) {
+            mx = priority[i];
+            idx = i;
+          }
+        }
+      }
+    }
+    if (idx != -1) {
+      start_time[idx] = current_time;
+      completion_time[idx] = start_time[idx] + burst_time[idx];
+      turnaround_time[idx] = completion_time[idx] - arrival_time[idx];
+      waiting_time[idx] = turnaround_time[idx] - burst_time[idx];
+      total_turnaround_time += turnaround_time[idx];
+      total_waiting_time += waiting_time[idx];
+      // display UI for SJF(PR) Sched.
+      _configGlobalVar.globalVar.priorityNPrUITrigger++;
+      updateUI = _configGlobalVar.globalVar.priorityNPrUITrigger <= n;
+      if (updateUI) publisherView(pid[idx], arrival_time[idx], burst_time[idx], priority[idx], waiting_time[idx], turnaround_time[idx]);
+      is_completed[idx] = 1;
+      completed++;
+      current_time = completion_time[idx];
+      prev = current_time;
+    } else {
+      current_time++;
+    }
+  }
+  var min_arrival_time = 10000000;
+  var max_completion_time = -1;
+  for (var i = 0; i < n; i++) {
+    min_arrival_time = Math.min(min_arrival_time, arrival_time[i]);
+    max_completion_time = Math.max(max_completion_time, completion_time[i]);
+  }
+  avg_turnaround_time = parseFloat(total_turnaround_time) / parseFloat(n);
+  avg_waiting_time = parseFloat(total_waiting_time) / parseFloat(n);
+  for (var i = 0; i < n; i++) {
+    console.log(pid[i], arrival_time[i], burst_time[i], priority[i], completion_time[i], turnaround_time[i], waiting_time[i]);
+  }
+  _configGlobalVar.globalVar.priorityNPrTtPushed++;
+  if (_configGlobalVar.globalVar.priorityNPrTtPushed === 1) _configGlobalVar.globalVar.avgTurnaroundTimes.push({
+    Process: "Priority (Non-Preemptive)",
+    Avgtt: avg_turnaround_time
+  });
+};
+
+},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","../config/globalVar":"468k9"}]},["2aKhF","3K3IO"], "3K3IO", "parcelRequire575a")
 
 //# sourceMappingURL=index.48460618.js.map

@@ -1,8 +1,9 @@
-import { globalVar } from "../config/globalVar";
-import * as tabFunction from "./tabUtils";
+import { globalVar } from "../../config/globalVar";
+import * as tabFunction from "../tabUtils";
 
 const fcfsScheduling = document.querySelector(".nav__menu-item__FCFS");
 const processFCFSRows = document.querySelector(".process__info-fcfs-box");
+const btnAlgo = document.querySelector(".process__btn");
 
 tabFunction.tabfunctionality();
 
@@ -29,6 +30,22 @@ export const displayFinalProcess = function (
             </div>
     `;
   processFCFSRows.insertAdjacentHTML("beforeend", html);
+};
+
+export const arrowHandler = function (publisher) {
+  btnAlgo.addEventListener("click", function () {
+    globalVar.btnAlgoClick++;
+    let shouldCallAlgo =
+      globalVar.btnAlgoClick === 1 &&
+      globalVar.btnfcfsClick === 0 &&
+      globalVar.btnSummaryClick === 0;
+    if (shouldCallAlgo)
+      publisher(
+        globalVar.processId,
+        globalVar.arrivalTimes,
+        globalVar.burstTimes
+      );
+  });
 };
 
 export const fcfsHandler = function (publisher) {

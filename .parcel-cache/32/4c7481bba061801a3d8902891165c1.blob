@@ -1,0 +1,31 @@
+var _viewsDisplayProcessViewDProcessView = require("../views/displayProcessView/dProcessView");
+var _viewsFcfsViewFcfsView = require("../views/fcfsView/fcfsView");
+var _viewsSjfViewSjfPreView = require("../views/sjfView/sjfPreView");
+var _viewsSjfViewSjfNPreView = require("../views/sjfView/sjfNPreView");
+var _viewsRoundRobinViewRrView = require("../views/roundRobinView/rrView");
+var _modelsFcfsAlgo = require("../models/fcfsAlgo");
+var _modelsSjfPreAlgo = require("../models/sjfPreAlgo");
+var _modelsSjfNPreAlgo = require("../models/sjfNPreAlgo");
+var _modelsRrAlgo = require("../models/rrAlgo");
+const displayProcessController = function (arrivalTime, priority, burstTime) {
+  _viewsDisplayProcessViewDProcessView.displayProcesses(arrivalTime, priority, burstTime);
+};
+const fcfsSchedulingController = function (processId, arrivalTimes, burstTimes) {
+  _modelsFcfsAlgo.FCFS(processId, arrivalTimes, burstTimes, _viewsFcfsViewFcfsView.displayFinalProcess);
+};
+const sjfPreSchedulingController = function (processId, burstTimes, arrivalTimes) {
+  _modelsSjfPreAlgo.SjfPreemptive(processId, burstTimes, arrivalTimes, _viewsSjfViewSjfPreView.displaySjfPrProcess);
+};
+const sjfNonPreController = function (processId, burstTimes, arrivalTimes) {
+  _modelsSjfNPreAlgo.SjfNonPreemptive(processId, burstTimes, arrivalTimes, _viewsSjfViewSjfNPreView.displaySjfNprprocess);
+};
+const roundRobinController = function (params) {
+  _modelsRrAlgo.roundRobin(processId, burstTimes, quantum, arrivalTimes, _viewsRoundRobinViewRrView.displayRRProcess);
+};
+const init = function () {
+  _viewsDisplayProcessViewDProcessView.displayProcessesHandler(displayProcessController);
+  _viewsFcfsViewFcfsView.fcfsHandler(fcfsSchedulingController);
+  _viewsSjfViewSjfPreView.sjfPreHandler(sjfPreSchedulingController);
+  _viewsSjfViewSjfNPreView.sjfNonPreHandler(sjfNonPreController);
+};
+init();

@@ -33,7 +33,7 @@ export const displayProcessesHandler = function (publisher) {
     const arrivalTime = Number(inputArrival.value);
     const priority = Number(inputPriority.value);
     const burstTime = Number(inputBurst.value);
-    const quantum = Number(inputQuantum.value);
+    globalVar.quantum = Number(inputQuantum.value);
 
     const pushError =
       inputArrival.value === "" ||
