@@ -1344,8 +1344,6 @@ _parcelHelpers.export(exports, "modalHandler", function () {
   return modalHandler;
 });
 const instruction = document.querySelector(".instruction");
-const modal = document.querySelector(".modal-view");
-const btnCloseModal = document.querySelector(".close-modal");
 const modalHandler = function () {
   instruction.addEventListener("click", function (event) {
     event.preventDefault();
@@ -1359,4 +1357,4 @@ const modalHandler = function () {
 
 },{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}]},["2aKhF","3K3IO"], "3K3IO", "parcelRequire575a")
 
-//# sourceMappingURL=index.48460618.js.map
+//# sourceMappingURL=index.HASH_REF_c69fbbebad126498fca5896448460618.js.map

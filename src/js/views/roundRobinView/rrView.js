@@ -1,5 +1,5 @@
 import { globalVar } from "../../config/globalVar";
-import * as tabFunction from "../tabUtils";
+import * as tabFunction from "../utilsView/tabUtils";
 
 const processRRRows = document.querySelector(".process__info-rr-box");
 const rrScheduling = document.querySelector(".nav__menu-item__RR");

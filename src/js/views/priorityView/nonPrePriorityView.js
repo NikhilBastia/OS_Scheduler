@@ -1,5 +1,5 @@
 import { globalVar } from "../../config/globalVar";
-import * as tabFunction from "../tabUtils";
+import * as tabFunction from "../utilsView/tabUtils";
 
 const processNonPriorityRows = document.getElementById(
   "process__info-non-priority-box"

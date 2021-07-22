@@ -1,5 +1,6 @@
 // import { functions } from "lodash";
 import * as displayProcessView from "../views/displayProcessView/dProcessView";
+import * as modalView from "../views/utilsView/instModal";
 import * as fcfsView from "../views/fcfsView/fcfsView";
 import * as sjfPreView from "../views/sjfView/sjfPreView";
 import * as sjfNonPreView from "../views/sjfView/sjfNPreView";
@@ -99,6 +100,7 @@ const nonPrePriorityController = function (
 
 const init = function () {
   displayProcessView.displayProcessesHandler(displayProcessController);
+  modalView.modalHandler();
   fcfsView.arrowHandler(fcfsSchedulingController);
   fcfsView.fcfsHandler(fcfsSchedulingController);
   sjfPreView.sjfPreHandler(sjfPreSchedulingController);

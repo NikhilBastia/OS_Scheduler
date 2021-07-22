@@ -1,0 +1,15 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "modal", function () {
+  return modal;
+});
+const modal = function () {
+  instruction.addEventListener("click", function (event) {
+    event.preventDefault();
+    modal.classList.remove("hidden");
+  });
+  btnCloseModal.addEventListener("click", function (event) {
+    event.preventDefault();
+    modal.classList.add("hidden");
+  });
+};

@@ -1,5 +1,5 @@
 import { globalVar } from "../../config/globalVar";
-import * as tabFunction from "../tabUtils";
+import * as tabFunction from "../utilsView/tabUtils";
 
 const processSJFNPrRows = document.querySelector(".process__info-sjfnpr-box");
 const sjfNScheduling = document.querySelector(".nav__menu-item__sjf-npr");

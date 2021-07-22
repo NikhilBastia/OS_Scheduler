@@ -1,5 +1,5 @@
 import { globalVar } from "../../config/globalVar";
-import * as tabFunction from "../tabUtils";
+import * as tabFunction from "../utilsView/tabUtils";
 
 const fcfsScheduling = document.querySelector(".nav__menu-item__FCFS");
 const processFCFSRows = document.querySelector(".process__info-fcfs-box");
