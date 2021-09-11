@@ -40,9 +40,13 @@ export const displayProcessesHandler = function (publisher) {
       inputBurst.value === "" ||
       inputQuantum.value === "";
 
-    if (pushError) {
+   if (pushError) {
       errorMsgs.push("Please fill all the inputs");
-      errorElement.innerText = errorMsgs[0];
+      errorElement.innerText = errorMsgs[errorMsgs.length - 1];
+      exclamationMark.classList.remove("hidden");
+    } else if (Number(inputQuantum.value) === 0) {
+      errorMsgs.push("Time quantum cannot be 0");
+      errorElement.innerText = errorMsgs[errorMsgs.length - 1];
       exclamationMark.classList.remove("hidden");
     } else {
       console.log("in else part");
